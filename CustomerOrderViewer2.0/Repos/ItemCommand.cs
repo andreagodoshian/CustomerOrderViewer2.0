@@ -1,30 +1,33 @@
-﻿using Dapper;
+﻿using CustomerOrderViewer2._0.Models;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CustomerOrderViewer2._0.Repos
 {
-    internal class ItemCommand
+    class ItemCommand
     {
-        private string _connection;
-        public ItemCommand(string conn)
+        private string _connectionString;
+
+        public ItemCommand(string connectionString)
         {
-            conn = _connection;
+            _connectionString = connectionString;
         }
-        public IList<Models.ItemModel> GetList()
+
+        public IList<ItemModel> GetList()
         {
-            List<Models.ItemModel> items = new List<Models.ItemModel>();
+            List<ItemModel> items = new List<ItemModel>();
 
-            var sProc = "Item_GetList";
+            var sql = "Item_GetList";
 
-            using (SqlConnection sqlConn = new SqlConnection(_connection))
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                items = sqlConn.Query<Models.ItemModel>(sProc).ToList();
+                items = connection.Query<ItemModel>(sql).ToList();
             }
+
             return items;
         }
     }
